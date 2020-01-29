@@ -2,42 +2,42 @@ module.exports = (client, oldMember, newMember) => {
   // console.log(oldMember)
   // if (oldMember.guild.id !== '533394970212827156') return
   // if (newMember.id !== client.user.id) console.log(newMember)
-    const voiceChannel = client.guilds.get(member.guild.id).channels.get(member.channelID)
-    require('dotenv').config()
-    const textToSpeech = require('@google-cloud/text-to-speech')
-    const streamifier = require('streamifier')
-    const clienttts = new textToSpeech.TextToSpeechClient()
+  const voiceChannel = client.guilds.get(member.guild.id).channels.get(member.channelID)
+  require('dotenv').config()
+  const textToSpeech = require('@google-cloud/text-to-speech')
+  const streamifier = require('streamifier')
+  const clienttts = new textToSpeech.TextToSpeechClient()
 
-    function leaveVoiceChannel (dispatcher, voiceChannel) {
-      return new Promise((resolve, reject) => {
-        dispatcher.on('end', end => {
-          resolve(voiceChannel.leave())
-        })
+  function leaveVoiceChannel (dispatcher, voiceChannel) {
+    return new Promise((resolve, reject) => {
+      dispatcher.on('end', end => {
+        resolve(voiceChannel.leave())
       })
-    }
-  
-    async function play () {
-      for (let i = 0; i < client.queue.length; i++) {
-        // console.log(client.queue[i])
-        const voiceChannel = client.guilds.get(client.queue[i].guild).channels.get(client.queue[i].channel)
-  
-        const request = {
-          input: { text: client.queue[i].text },
-          voice: {
-            languageCode: 'pl-PL',
-            name: 'pl-PL-Wavenet-A'
-          },
-          audioConfig: { audioEncoding: 'MP3' }
-        }
-  
-        const [response] = await clienttts.synthesizeSpeech(request)
-        const stm = new streamifier.createReadStream(response.audioContent)
-        const connection = await voiceChannel.join()
-        const dispatcher = connection.play(stm)
-        await leaveVoiceChannel(dispatcher, voiceChannel)
+    })
+  }
+
+  async function play () {
+    for (let i = 0; i < client.queue.length; i++) {
+      // console.log(client.queue[i])
+      const voiceChannel = client.guilds.get(client.queue[i].guild).channels.get(client.queue[i].channel)
+
+      const request = {
+        input: { text: client.queue[i].text },
+        voice: {
+          languageCode: 'pl-PL',
+          name: 'pl-PL-Wavenet-A'
+        },
+        audioConfig: { audioEncoding: 'MP3' }
       }
-      client.queue = []
+
+      const [response] = await clienttts.synthesizeSpeech(request)
+      const stm = new streamifier.createReadStream(response.audioContent)
+      const connection = await voiceChannel.join()
+      const dispatcher = connection.play(stm)
+      await leaveVoiceChannel(dispatcher, voiceChannel)
     }
+    client.queue = []
+  }
 
   if (newMember.id !== client.user.id) {
     let tekst = null

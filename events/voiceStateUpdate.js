@@ -1,8 +1,4 @@
 module.exports = (client, oldMember, newMember) => {
-  // console.log(oldMember)
-  // if (oldMember.guild.id !== '533394970212827156') return
-  // if (newMember.id !== client.user.id) console.log(newMember)
-  const voiceChannel = client.guilds.get(member.guild.id).channels.get(member.channelID)
   require('dotenv').config()
   const textToSpeech = require('@google-cloud/text-to-speech')
   const streamifier = require('streamifier')

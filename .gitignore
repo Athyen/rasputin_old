@@ -3,4 +3,4 @@ config.json
 key.json
 data/
 audio/
-.vsocode/
+.vscode/

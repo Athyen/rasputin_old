@@ -15,7 +15,9 @@
     "streamifier": "^0.1.1",
     "the-traveler": "^1.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "lodash": ">=4.17.12"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
